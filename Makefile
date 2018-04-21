@@ -11,7 +11,7 @@
 
 # --- Tonc paths ---
 # If not defined as environment variable, assumed to be 2 dirs up
-export TONCCODE	:= ~/tonc/code
+export TONCCODE	:= /usr/local/tonc/code
 
 include $(TONCCODE)/tonc_rules
 
@@ -28,7 +28,8 @@ export PATH	:=	$(DEVKITARM)/bin:$(PATH)
 # SRCDIRS	: List of source file directories
 # DATADIRS	: List of data file directories
 # INCDIRS	: List of header file directories
-# LIBDIRS	: List of library directories
+# TONCINCDIRS	: List of header file directories of tonc code
+# TONCLIBDIRS	: List of library directories of tonc code
 # General note: use `.' for the current dir, don't leave the lists empty.
 
 export PROJ	:= $(notdir $(CURDIR))
@@ -38,11 +39,12 @@ GFXLIBS		:= libgfx.a
 LIBS		:= -ltonc -lgfx
 
 BUILD		:= build
-SRCDIRS		:= source
+SRCDIRS	:= source
 DATADIRS	:= data
-TONCINCDIRS := /usr/local/include/tonclib/include
-INCDIRS		:= include
-LIBDIRS		:= /usr/local/
+INCDIRS	:= include
+LIBTONC	:= $(TONCCODE)/tonclib
+TONCINCDIRS	:= $(LIBTONC)/include
+TONCLIBDIRS	:= $(LIBTONC)/lib
 
 # --- switches ---
 
@@ -53,8 +55,8 @@ bDEBUG2	:= 0	# Generate debug info (bDEBUG2? Not a full DEBUG flag. Yet)
 
 # === BUILD FLAGS =====================================================
 # This is probably where you can stop editing
-# NOTE: I've noticed that -fgcse and -ftree-loop-optimize sometimes muck 
-#	up things (gcse seems fond of building masks inside a loop instead of 
+# NOTE: I've noticed that -fgcse and -ftree-loop-optimize sometimes muck
+#	up things (gcse seems fond of building masks inside a loop instead of
 #	outside them for example). Removing them sometimes helps
 
 # --- Architecture ---
@@ -108,7 +110,7 @@ endif
 
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 
-# Still in main dir: 
+# Still in main dir:
 # * Define/export some extra variables
 # * Invoke this file again from the build dir
 # PONDER: what happens if BUILD == "" ?
@@ -142,10 +144,10 @@ export OFILES	:=	$(addsuffix .o, $(BINFILES))					\
 # --- Create include and library search paths ---
 export INCLUDE	:=	$(foreach dir,$(INCDIRS),-I$(CURDIR)/$(dir))	\
 					$(foreach dir,$(TONCINCDIRS),-I$(dir))	\
-					$(foreach dir,$(LIBDIRS),-I$(dir)/include)		\
+					$(foreach dir,$(TONCLIBDIRS),-I$(dir)/include)  \
 					-I$(CURDIR)/$(BUILD)
- 
-export LIBPATHS	:=	-L$(CURDIR) $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+export LIBPATHS	:=	-L$(CURDIR) $(foreach dir,$(TONCLIBDIRS),-L$(dir))
 
 # --- More targets ----------------------------------------------------
 
