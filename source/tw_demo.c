@@ -1,7 +1,7 @@
 #include <string.h>
 
-#include "toolbox.h"
-#include "input.h"
+#include <tonc.h>
+
 #include "menu_bg.h"
 
 int main()
