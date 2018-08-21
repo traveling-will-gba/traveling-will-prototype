@@ -76,7 +76,7 @@ void write_options(int n_options, char **options) {
 
 int main()
 {
-	REG_DISPCNT = DCNT_MODE0 | DCNT_BG2 | DCNT_BG0;
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG2 | DCNT_BG0;
 	set_background();
 
 	memset(pressed, 0, sizeof(pressed));
