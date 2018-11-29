@@ -167,6 +167,9 @@ clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).gba
 
+run:
+	vbam traveling-will-prototype.gba
+
 
 else		# If we're here, we should be in the BUILD dir
 
